@@ -1,10 +1,10 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin')
 
-const deps = require("./package.json").dependencies;
+const deps = require('./package.json').dependencies
 module.exports = {
   output: {
-    publicPath: 'http://localhost:8080/',
+    publicPath: 'http://localhost:8081/',
   },
 
   resolve: {
@@ -12,7 +12,7 @@ module.exports = {
   },
 
   devServer: {
-    port: 8080,
+    port: 8081,
   },
 
   module: {
@@ -34,18 +34,21 @@ module.exports = {
         use: {
           loader: 'babel-loader',
         },
+        // options: { presets: ['@babel/env', '@babel/preset-react'] },
       },
     ],
   },
 
   plugins: [
     new ModuleFederationPlugin({
-      name: 'chat',
-      library: { type: 'var', name: 'chat' },
+      name: 'home',
+      library: { type: 'var', name: 'home' },
       filename: 'remoteEntry.js',
-      remotes: {},
+      remotes: {
+        chat: 'chat',
+      },
       exposes: {
-        './Chat': './Chat',
+        // chat: '../client/Chat.jsx',
       },
       shared: {
         ...deps,
